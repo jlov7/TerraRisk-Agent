@@ -1,0 +1,76 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+  id-token: write
+  packages: write
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install uv
+        run: pip install uv
+      - name: Backend dependencies
+        run: |
+          cd apps/terrarisk-agent/backend
+          uv sync
+      - name: Run backend tests
+        run: |
+          cd apps/terrarisk-agent/backend
+          uv run pytest
+      - name: Run offline evaluation gate
+        run: |
+          cd apps/terrarisk-agent/backend
+          uv run python ../evals/run_eval.py
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+      - name: Install pnpm
+        run: npm install -g pnpm
+      - name: Frontend install
+        run: |
+          cd apps/terrarisk-agent/frontend
+          pnpm install
+      - name: Lint frontend
+        run: |
+          cd apps/terrarisk-agent/frontend
+          pnpm lint
+
+  container-signing:
+    needs: build-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}/terrarisk-backend
+      - name: Build image
+        run: |
+          docker build -t ${{ steps.meta.outputs.tags }} apps/terrarisk-agent/backend
+      - name: Generate SBOM
+        run: |
+          pip install cyclonedx-bom
+          cyclonedx-py --format json --output sbom.json --spec-version 1.4
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3.6.0
+      - name: Sign container
+        env:
+          COSIGN_EXPERIMENTAL: 1
+        run: |
+          echo "Signing with GitHub OIDC"
+          cosign sign --yes ${{ steps.meta.outputs.tags }}

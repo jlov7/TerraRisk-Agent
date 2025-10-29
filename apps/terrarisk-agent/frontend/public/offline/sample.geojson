@@ -1,0 +1,29 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Orleans Parish",
+        "hazard": "hurricane",
+        "eal": 0.92
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-90.0715, 29.9511]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Harris County",
+        "hazard": "flood",
+        "eal": 0.77
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-95.3698, 29.7604]
+      }
+    }
+  ]
+}

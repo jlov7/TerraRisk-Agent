@@ -1,0 +1,8 @@
+state,county,county_fips,hazard_type,expected_annual_loss,population,resilience_index
+LA,Orleans Parish,22071,hurricane,0.92,383997,0.41
+TX,Harris County,48201,flood,0.77,4710000,0.55
+FL,Miami-Dade County,12086,hurricane,0.81,2710000,0.52
+CA,Sonoma County,06097,wildfire,0.68,494336,0.60
+CO,Boulder County,08013,wildfire,0.63,326196,0.58
+NC,New Hanover County,37129,flood,0.59,235585,0.57
+AL,Mobile County,01097,hurricane,0.56,414114,0.49

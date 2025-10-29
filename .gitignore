@@ -1,0 +1,15 @@
+__pycache__/
+.pytest_cache/
+.venv/
+uv.lock
+node_modules/
+.pnpm-store/
+dist/
+build/
+.next/
+apps/terrarisk-agent/backend/terrarisk/examples/artifacts/*
+!apps/terrarisk-agent/backend/terrarisk/examples/artifacts/.gitkeep
+.DS_Store
+*.pyc
+*.pyo
+*.log
