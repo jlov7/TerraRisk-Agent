@@ -2,6 +2,8 @@
 
 Complete reference for the TerraRisk Agent REST API. This document explains every endpoint, request/response formats, error handling, and provides examples for both technical and non-technical users.
 
+**Note:** This is a personal R&D project—a passion-driven exploration of responsible AI agent development. It serves as a research platform and reference implementation, not a commercial product or business venture.
+
 ## Base Information
 
 **Base URL:** `http://localhost:8000` (when running locally)

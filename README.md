@@ -13,6 +13,18 @@ The AI Governance Suite explores this frontier through **TerraRisk Agent**, a ge
 - **Produce auditable, signed outputs** with complete provenance tracking
 - **Enforce policies and governance** at every step through Open Policy Agent (OPA)
 
+## About This Project
+
+**This is a personal R&D project**—a passion-driven exploration of responsible AI agent development. Born from a genuine curiosity about how AI agents can be built with transparency, accountability, and trust at their core, this work represents ongoing learning and experimentation.
+
+**Important clarifications:**
+- This is **not a commercial product** or business venture
+- This is **not being developed into a product** or commercial offering
+- This is a **research platform** and **reference implementation** for exploring AI governance patterns
+- Use it as a learning resource, extend it for your own R&D, or treat it as a technical demonstration
+
+**Purpose:** To explore and demonstrate how modern AI agent frameworks can be built with provenance tracking, policy enforcement, and governance mechanisms that enable trustworthy AI systems.
+
 ## Why This Matters Today
 
 ### The AI Agent Revolution
@@ -232,12 +244,7 @@ This is a **research platform**—a sandbox for exploring responsible AI agent d
 
 ## Contributing & Research
 
-This is a **personal R&D project** exploring the intersection of:
-- AI agent frameworks (Google Earth AI, OpenAI AgentKit, Anthropic tool use)
-- Geospatial intelligence (FEMA NRI, Earth Engine, satellite imagery)
-- Responsible AI governance (A2PA, Sigstore, C2PA, OPA)
-
-**Not a commercial product**—treat it as a reference implementation and research platform.
+This is a **personal R&D project**—a passion-driven exploration of responsible AI agent development. It serves as a research platform and reference implementation for exploring how AI agents can be built with transparency, accountability, and trust at their core. This work represents ongoing learning and experimentation, not a commercial product or business venture.
 
 ## Documentation
 
@@ -258,3 +265,7 @@ This is a **personal R&D project** exploring the intersection of:
 ---
 
 **Built with curiosity. Designed for accountability. Ready for the future of AI.**
+
+---
+
+**Project Status:** This is a personal R&D project—a passion-driven exploration of responsible AI agent development. It serves as a research platform and reference implementation, not a commercial product or business venture. Use it as a learning resource, extend it for your own R&D, or treat it as a technical demonstration of how AI agents can be built with transparency, accountability, and trust.

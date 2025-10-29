@@ -2,6 +2,8 @@
 
 This document explains how TerraRisk Agent works—from a high-level story that anyone can understand, to technical deep-dives for developers. Whether you're an executive evaluating AI solutions, an analyst using the system, or an engineer extending it, this guide will help you understand the architecture.
 
+**Note:** This is a personal R&D project—a passion-driven exploration of responsible AI agent development. It serves as a research platform and reference implementation, not a commercial product or business venture.
+
 ## The Big Picture: Why This Architecture Matters
 
 Imagine you're an insurance underwriter assessing hurricane risk for properties along the Gulf Coast. You need to:

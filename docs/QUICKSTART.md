@@ -2,6 +2,8 @@
 
 Welcome to TerraRisk Agent! This guide will help you get up and running quickly, whether you're a business analyst exploring AI-powered geospatial intelligence, a developer integrating the API, or a security professional evaluating governance frameworks.
 
+**Note:** This is a personal R&D project—a passion-driven exploration of responsible AI agent development. It serves as a research platform and reference implementation, not a commercial product or business venture.
+
 ## What You'll Experience
 
 When you run TerraRisk Agent, you'll get:

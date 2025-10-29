@@ -2,6 +2,8 @@
 
 TerraRisk Agent is a complete implementation demonstrating how to build **trustworthy AI agents** for geospatial intelligence. It combines Google Earth AI's reasoning capabilities, FEMA National Risk Index data, and BigQuery Earth Engine analytics to produce auditable, signed reports with complete provenance tracking.
 
+**About This Project:** This is a personal R&D project—a passion-driven exploration of responsible AI agent development. It serves as a research platform and reference implementation, not a commercial product or business venture.
+
 ## What Makes TerraRisk Agent Special
 
 **For Business Users:**

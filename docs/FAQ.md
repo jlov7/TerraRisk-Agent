@@ -19,12 +19,15 @@ Frequently asked questions about TerraRisk Agent, covering everything from basic
 
 ### Is this a commercial product?
 
-**No.** TerraRisk Agent is a **personal R&D project** exploring the intersection of:
-- AI agent frameworks (Google Earth AI, OpenAI AgentKit, Anthropic tool use)
-- Geospatial intelligence (FEMA NRI, Earth Engine, satellite imagery)
-- Responsible AI governance (A2PA, Sigstore, C2PA, OPA)
+**No.** TerraRisk Agent is a **personal R&D project**—a passion-driven exploration of responsible AI agent development. This work represents ongoing learning and experimentation in how AI agents can be built with transparency, accountability, and trust.
 
-Treat it as a **reference implementation** and research platform—not production software.
+**Important clarifications:**
+- This is **not a commercial product** or business venture
+- This is **not being developed into a product** or commercial offering
+- This is a **research platform** and **reference implementation** for exploring AI governance patterns
+- Use it as a learning resource, extend it for your own R&D, or treat it as a technical demonstration
+
+Treat it as a **reference implementation** and research platform—not production software or a commercial product.
 
 ### What makes TerraRisk Agent useful today?
 
@@ -255,7 +258,7 @@ Opens dashboard at http://localhost:3000 and API at http://localhost:8000/docs
 2. Review [`ARCHITECTURE.md`](ARCHITECTURE.md) to understand modules
 3. Open pull requests with improvements
 
-**Note:** This is a personal R&D project—contributions should align with the research goals of exploring responsible AI agent development.
+**Note:** This is a personal R&D project—a passion-driven exploration of responsible AI agent development. Contributions should align with the research goals of exploring AI governance patterns and building trustworthy AI systems.
 
 ---
 
