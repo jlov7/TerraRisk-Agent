@@ -9,6 +9,8 @@ build/
 .next/
 apps/terrarisk-agent/backend/terrarisk/examples/artifacts/*
 !apps/terrarisk-agent/backend/terrarisk/examples/artifacts/.gitkeep
+.cursorindexingignore
+.specstory/
 .DS_Store
 *.pyc
 *.pyo

@@ -6,14 +6,15 @@ import { useEffect, useRef } from "react";
 
 interface MapPreviewProps {
   geojsonUrl?: string;
+  className?: string;
 }
 
-export function MapPreview({ geojsonUrl }: MapPreviewProps) {
+export function MapPreview({ geojsonUrl, className }: MapPreviewProps) {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const mapInstance = useRef<maplibregl.Map | null>(null);
 
   useEffect(() => {
-    if (!mapContainer.current) return;
+    if (!mapContainer.current || mapInstance.current) return;
     mapInstance.current = new maplibregl.Map({
       container: mapContainer.current,
       style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
@@ -21,11 +22,23 @@ export function MapPreview({ geojsonUrl }: MapPreviewProps) {
       zoom: 4
     });
 
-    const map = mapInstance.current;
+    return () => {
+      mapInstance.current?.remove();
+      mapInstance.current = null;
+    };
+  }, []);
 
-    map.on("load", () => {
-      const isRemote = geojsonUrl?.startsWith("http");
-      const sourceUrl = isRemote ? geojsonUrl : "/offline/sample.geojson";
+  useEffect(() => {
+    const map = mapInstance.current;
+    if (!map) return;
+
+    const sourceUrl = geojsonUrl ?? "/offline/sample.geojson";
+    const updateSource = () => {
+      const existing = map.getSource("hazards") as maplibregl.GeoJSONSource | undefined;
+      if (existing) {
+        existing.setData(sourceUrl);
+        return;
+      }
       map.addSource("hazards", {
         type: "geojson",
         data: sourceUrl
@@ -51,12 +64,14 @@ export function MapPreview({ geojsonUrl }: MapPreviewProps) {
           "circle-stroke-color": "#ffffff"
         }
       });
-    });
-
-    return () => {
-      mapInstance.current?.remove();
     };
+
+    if (map.isStyleLoaded()) {
+      updateSource();
+      return;
+    }
+    map.once("load", updateSource);
   }, [geojsonUrl]);
 
-  return <div ref={mapContainer} style={{ height: "400px", borderRadius: "16px", overflow: "hidden" }} />;
+  return <div ref={mapContainer} className={className ?? "map-canvas"} />;
 }

@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Annotated
 
-from fastapi import Depends, FastAPI, Path
+from fastapi import Depends, FastAPI, HTTPException, Path as ApiPath
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 
 from .config import Settings, get_settings
 from .models.domain import (
@@ -36,6 +38,14 @@ def get_app_settings() -> Settings:
     return get_settings()
 
 
+def _artifact_dir(settings: Settings) -> Path:
+    configured = Path(settings.artifact_dir)
+    if not configured.is_absolute():
+        configured = Path(__file__).resolve().parent / configured
+    configured.mkdir(parents=True, exist_ok=True)
+    return configured
+
+
 @app.get("/healthz")
 def healthcheck(settings: Annotated[Settings, Depends(get_app_settings)]) -> dict[str, str]:
     return {"status": "ok", "mode": "cloud" if settings.earth_ai_enabled else "offline"}
@@ -52,8 +62,20 @@ def report(request: AnalysisRequest) -> AnalysisResponse:
     return response
 
 
+@app.get("/artifacts/{filename}")
+def get_artifact(
+    filename: Annotated[str, ApiPath(..., description="Artifact filename")],
+    settings: Annotated[Settings, Depends(get_app_settings)],
+) -> FileResponse:
+    safe_name = Path(filename).name
+    artifact_path = _artifact_dir(settings) / safe_name
+    if not artifact_path.exists():
+        raise HTTPException(status_code=404, detail="Artifact not found")
+    return FileResponse(artifact_path)
+
+
 @app.get("/scenarios/{hazard}", response_model=ScenarioResponse)
-def scenario(hazard: Annotated[HazardType, Path(..., description="Hazard scenario key")]) -> ScenarioResponse:
+def scenario(hazard: Annotated[HazardType, ApiPath(..., description="Hazard scenario key")]) -> ScenarioResponse:
     summary = f"Synthetic {hazard.value} scenario for offline mode."
     metrics = {"risk_score": 0.7, "exposed_population": 125000}
     recommended_actions = [

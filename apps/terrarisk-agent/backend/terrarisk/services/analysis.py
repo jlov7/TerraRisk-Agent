@@ -97,4 +97,6 @@ def run_analysis(request: AnalysisRequest) -> AnalysisResponse:
         steps=planner_result.steps,
         artifacts=artifacts,
         action_credentials=[*planner_credentials, *report_credentials],
+        highlights=highlights,
+        sources=sources,
     )

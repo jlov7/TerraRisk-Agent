@@ -31,6 +31,7 @@ Complete reference for the TerraRisk Agent REST API. This document explains ever
 | `/healthz` | GET | Health check | Monitoring, status verification |
 | `/analyze` | POST | Full analysis workflow | Main entry point for geospatial queries |
 | `/report` | POST | Generate report artifacts | Alias for `/analyze` (semantic clarity) |
+| `/artifacts/{filename}` | GET | Download generated artifacts | Fetch PDFs, GeoJSON, CSV outputs |
 | `/scenarios/{hazard}` | GET | Quick scenario summaries | Tabletop exercises, briefings |
 | `/portfolio/stress` | POST | Portfolio stress testing | Risk assessment for insurance portfolios |
 
@@ -179,17 +180,32 @@ for artifact in result['artifacts']:
     {
       "uri": "file:///path/to/550e8400_report.pdf",
       "type": "application/pdf",
-      "hash": "sha256:abc123..."
+      "hash": "sha256:abc123...",
+      "metadata": {
+        "filename": "550e8400_report.pdf",
+        "size_bytes": 16384,
+        "download_url": "/artifacts/550e8400_report.pdf"
+      }
     },
     {
       "uri": "file:///path/to/550e8400_layers.geojson",
       "type": "application/geo+json",
-      "hash": "sha256:def456..."
+      "hash": "sha256:def456...",
+      "metadata": {
+        "filename": "550e8400_layers.geojson",
+        "size_bytes": 8192,
+        "download_url": "/artifacts/550e8400_layers.geojson"
+      }
     },
     {
       "uri": "file:///path/to/550e8400_portfolio_diff.csv",
       "type": "text/csv",
-      "hash": "sha256:789ghi..."
+      "hash": "sha256:789ghi...",
+      "metadata": {
+        "filename": "550e8400_portfolio_diff.csv",
+        "size_bytes": 2048,
+        "download_url": "/artifacts/550e8400_portfolio_diff.csv"
+      }
     }
   ],
   "action_credentials": [
@@ -250,6 +266,28 @@ Identical to `/analyze` but semantically clearer when you only want report gener
 **Use Case:** When integrating with systems that explicitly request "report generation" rather than "analysis."
 
 **Request/Response:** Same as `/analyze`
+
+---
+
+## Artifact Downloads
+
+### `GET /artifacts/{filename}`
+
+Fetches a generated artifact from the configured artifact directory. Use the `metadata.download_url`
+field returned in `/analyze` responses.
+
+**Use Case:** Download PDFs, GeoJSON layers, or CSV extracts created during an analysis run.
+
+**Request Examples:**
+
+```bash
+curl -O http://localhost:8000/artifacts/550e8400_report.pdf
+```
+
+**Response:** Binary file stream with the artifact contents.
+
+**Error Responses:**
+- `404 Not Found`: Artifact does not exist
 
 ---
 

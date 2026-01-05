@@ -51,6 +51,14 @@ def _hash_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
+def _artifact_metadata(path: Path) -> dict[str, Any]:
+    return {
+        "filename": path.name,
+        "size_bytes": path.stat().st_size,
+        "download_url": f"/artifacts/{path.name}",
+    }
+
+
 def _artifact_dir() -> Path:
     settings = get_settings()
     configured = Path(settings.artifact_dir)
@@ -109,9 +117,24 @@ def build_report_bundle(
     csv_path = _write_csv(run_id, portfolio_rows)
 
     artifacts = [
-        Artifact(uri=str(pdf_path), type="application/pdf", hash=_hash_bytes(pdf_path.read_bytes())),
-        Artifact(uri=str(geojson_path), type="application/geo+json", hash=_hash_bytes(geojson_path.read_bytes())),
-        Artifact(uri=str(csv_path), type="text/csv", hash=_hash_bytes(csv_path.read_bytes())),
+        Artifact(
+            uri=str(pdf_path),
+            type="application/pdf",
+            hash=_hash_bytes(pdf_path.read_bytes()),
+            metadata=_artifact_metadata(pdf_path),
+        ),
+        Artifact(
+            uri=str(geojson_path),
+            type="application/geo+json",
+            hash=_hash_bytes(geojson_path.read_bytes()),
+            metadata=_artifact_metadata(geojson_path),
+        ),
+        Artifact(
+            uri=str(csv_path),
+            type="text/csv",
+            hash=_hash_bytes(csv_path.read_bytes()),
+            metadata=_artifact_metadata(csv_path),
+        ),
     ]
 
     credential = create_action_credential(

@@ -64,6 +64,8 @@ class AnalysisResponse(BaseModel):
     steps: list[PlannerStep]
     artifacts: list[Artifact]
     action_credentials: list[ActionCredential]
+    highlights: list[str] = Field(default_factory=list)
+    sources: list[str] = Field(default_factory=list)
 
 
 class ScenarioResponse(BaseModel):

@@ -3,8 +3,18 @@
 import axios from "axios";
 import type { AnalysisMode, AnalysisResponse } from "./types";
 
-const API_BASE_URL =
+export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+
+export function resolveApiUrl(path: string): string {
+  if (path.startsWith("http")) {
+    return path;
+  }
+  if (!path.startsWith("/")) {
+    return `${API_BASE_URL}/${path}`;
+  }
+  return `${API_BASE_URL}${path}`;
+}
 
 export async function submitAnalysis(
   params: {

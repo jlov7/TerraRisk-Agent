@@ -218,6 +218,7 @@ response = requests.post(
 result = response.json()
 print(f"Run ID: {result['run_id']}")
 print(f"Artifacts: {[a['uri'] for a in result['artifacts']]}")
+print("Download URLs:", [a.get("metadata", {}).get("download_url") for a in result["artifacts"]])
 ```
 
 **Using the Interactive API Docs:**
@@ -277,6 +278,14 @@ When you run an analysis, TerraRisk Agent produces multiple artifacts:
 ```bash
 export ARTIFACT_DIR=/tmp/terrarisk
 uvicorn terrarisk.main:app --reload
+```
+
+### Downloading Artifacts
+
+Each artifact includes `metadata.download_url`. Fetch it from the API:
+
+```bash
+curl -O http://localhost:8000/artifacts/550e8400_report.pdf
 ```
 
 ### Artifact Types

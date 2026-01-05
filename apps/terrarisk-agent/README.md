@@ -121,6 +121,8 @@ Every analysis produces:
 
 **Location**: `apps/terrarisk-agent/backend/terrarisk/examples/artifacts/`
 
+**Download**: Each artifact includes `metadata.download_url` for `GET /artifacts/{filename}`
+
 **Customize**: Set `ARTIFACT_DIR` environment variable
 
 ## Quality Assurance
