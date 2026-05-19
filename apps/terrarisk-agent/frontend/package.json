@@ -3,27 +3,49 @@
   "version": "0.1.0",
   "private": true,
   "description": "Personal passion R&D front-end for the TerraRisk Agent.",
+  "packageManager": "pnpm@10.33.4",
+  "engines": {
+    "node": ">=20.9.0",
+    "pnpm": ">=10.33.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.40.0",
-    "axios": "^1.7.2",
-    "maplibre-gl": "^3.6.2",
-    "next": "14.2.11",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "zod": "^3.23.8"
+    "@tanstack/react-query": "^5.100.11",
+    "axios": "^1.16.1",
+    "maplibre-gl": "^5.24.0",
+    "next": "16.2.6",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@types/node": "^20.12.7",
-    "@types/react": "^18.2.66",
-    "@types/react-dom": "^18.2.22",
-    "eslint": "^8.57.0",
-    "eslint-config-next": "14.2.11",
-    "typescript": "^5.4.3"
+    "@types/node": "^20.19.41",
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "16.2.6",
+    "typescript": "^5.9.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "brace-expansion@<1.1.13": "1.1.13",
+      "flatted": "3.4.2",
+      "minimatch@<3.1.4": "3.1.4",
+      "picomatch@<2.3.2": "2.3.2",
+      "picomatch@>=4.0.0 <4.0.4": "4.0.4",
+      "postcss": "8.5.15",
+      "protocol-buffers-schema": "3.6.1"
+    },
+    "onlyBuiltDependencies": [
+      "unrs-resolver"
+    ],
+    "ignoredBuiltDependencies": [
+      "sharp"
+    ]
   }
 }

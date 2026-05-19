@@ -45,6 +45,33 @@ def _steps_to_credentials(steps: list[PlannerStep]) -> list[ActionCredential]:
     return credentials
 
 
+def _selected_hazards(request: AnalysisRequest) -> list[str]:
+    if request.hazards:
+        return [haz.value for haz in request.hazards]
+
+    query = request.query.lower()
+    inferred = [haz.value for haz in HazardType if haz.value in query]
+    return inferred or [HazardType.HURRICANE.value]
+
+
+def _summary_highlight(records: list[dict[str, Any]], hazards: list[str]) -> str | None:
+    if not records:
+        return None
+
+    top_record = records[0]
+    primary_hazard = hazards[0] if hazards else str(top_record["hazard_type"])
+    if primary_hazard == HazardType.HURRICANE.value and len(records) > 1:
+        return (
+            f"{top_record['county']} and {records[1]['county']} show elevated "
+            f"{primary_hazard} EAL"
+        )
+    if primary_hazard == HazardType.FLOOD.value:
+        return f"{top_record['county']} flood hot spots with high population"
+    if primary_hazard == HazardType.WILDFIRE.value:
+        return f"{top_record['county']} wildfire exposure requires mitigation priority"
+    return f"{top_record['county']} shows elevated {primary_hazard} EAL"
+
+
 def run_analysis(request: AnalysisRequest) -> AnalysisResponse:
     run_id = str(uuid.uuid4())
 
@@ -53,7 +80,7 @@ def run_analysis(request: AnalysisRequest) -> AnalysisResponse:
 
     nri_records = _load_nri_samples()
 
-    selected_hazards = [haz.value for haz in request.hazards or [HazardType.HURRICANE]]
+    selected_hazards = _selected_hazards(request)
     ranked = [
         record
         for record in nri_records
@@ -64,10 +91,12 @@ def run_analysis(request: AnalysisRequest) -> AnalysisResponse:
     boundary_provider = BoundaryProvider()
     features = [boundary_provider.county_feature(item["county_fips"]) for item in ranked]
 
-    highlights = [
+    detail_highlights = [
         f"{item['county']} ({item['county_fips']}): EAL {item['eal']} with resilience index {item['resilience_index']}"
         for item in ranked
     ]
+    summary_highlight = _summary_highlight(ranked, selected_hazards)
+    highlights = [summary_highlight, *detail_highlights] if summary_highlight else detail_highlights
     sources = [
         "Synthetic Earth AI reasoning trace",
         "FEMA National Risk Index (offline fixture)",
@@ -87,6 +116,7 @@ def run_analysis(request: AnalysisRequest) -> AnalysisResponse:
         request,
         run_id=run_id,
         highlights=highlights,
+        summary=summary_highlight,
         sources=sources,
         features=features,
         portfolio_rows=portfolio_rows,

@@ -30,10 +30,12 @@ def evaluate(dataset_path: Path) -> float:
             response = run_analysis(request)
             snippets = []
             for credential in response.action_credentials:
+                if credential.action["type"] != "report.compose":
+                    continue
                 for claim in credential.claims:
                     if claim.get("name") == "description":
                         snippets.append(str(claim.get("value")))
-            narrative = " ".join(snippets)
+            narrative = " ".join(snippets) or " ".join(response.highlights)
             score = rouge_l_f1(record["expected_summary"], narrative)
             scores.append(score)
     return sum(scores) / len(scores)

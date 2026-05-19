@@ -105,6 +105,7 @@ def build_report_bundle(
     sources: list[str],
     features: Iterable[dict[str, Any]],
     portfolio_rows: Iterable[dict[str, Any]],
+    summary: str | None = None,
 ) -> Tuple[list[Artifact], list]:
     html = REPORT_TEMPLATE.render(
         query=request.query,
@@ -143,7 +144,10 @@ def build_report_bundle(
         outputs=[artifact.uri for artifact in artifacts],
         source="reports.compose",
         artifacts=artifacts,
-        claims=[{"name": "mode", "value": request.mode.value}],
+        claims=[
+            {"name": "mode", "value": request.mode.value},
+            *([{"name": "description", "value": summary}] if summary else []),
+        ],
         mode=request.mode.value,
     )
 

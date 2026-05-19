@@ -14,9 +14,9 @@ jobs:
   build-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
       - name: Install uv
@@ -24,7 +24,7 @@ jobs:
       - name: Backend dependencies
         run: |
           cd apps/terrarisk-agent/backend
-          uv sync
+          uv sync --extra dev
       - name: Run backend tests
         run: |
           cd apps/terrarisk-agent/backend
@@ -33,13 +33,16 @@ jobs:
         run: |
           cd apps/terrarisk-agent/backend
           uv run python ../evals/run_eval.py
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 10.33.4
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "20"
           cache: pnpm
-      - name: Install pnpm
-        run: npm install -g pnpm
+          cache-dependency-path: apps/terrarisk-agent/frontend/pnpm-lock.yaml
       - name: Frontend install
         run: |
           cd apps/terrarisk-agent/frontend
@@ -52,22 +55,37 @@ jobs:
   container-signing:
     needs: build-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Docker metadata
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ghcr.io/${{ github.repository }}/terrarisk-backend
+      - name: Log in to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build image
         run: |
           docker build -t ${{ steps.meta.outputs.tags }} apps/terrarisk-agent/backend
+      - name: Push image
+        run: |
+          docker push ${{ steps.meta.outputs.tags }}
       - name: Generate SBOM
         run: |
-          pip install cyclonedx-bom
-          cyclonedx-py --format json --output sbom.json --spec-version 1.4
+          pip install cyclonedx-bom uv
+          cd apps/terrarisk-agent/backend
+          uv sync --extra dev
+          cyclonedx-py environment .venv --output-format JSON --output-file ../../../sbom.json --spec-version 1.4
       - name: Install cosign
-        uses: sigstore/cosign-installer@v3.6.0
+        uses: sigstore/cosign-installer@v4.1.2
       - name: Sign container
         env:
           COSIGN_EXPERIMENTAL: 1
